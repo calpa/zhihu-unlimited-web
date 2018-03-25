@@ -1,91 +1,149 @@
 <template>
-  <section class="container">
-    <div>
-        <b-table 
-            striped 
-            hover 
-            :items="lives" 
-            :fields="fields"
-            :sort-by.sync="sortBy"
-            :sort-desc.sync="sortDesc"
-            >
-            <template slot="subject" slot-scope="data">
-                <a :href="`https://www.zhihu.com/lives/${data.item.id}`">
-                    {{data.value}}
-                </a>
-            </template>
+  <b-container>
+    <b-row>
+      <b-col>
+        <h2>知乎无限 live </h2>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col
+        md="6"
+        class="my-1">
+        <b-form-group
+          horizontal
+          label="Filter"
+          class="mb-0">
+          <b-input-group>
+            <b-form-input
+              v-model="filter"
+              placeholder="Type to Search" />
+            <b-input-group-append>
+              <b-btn
+                :disabled="!filter"
+                @click="filter = ''">Clear</b-btn>
+            </b-input-group-append>
+          </b-input-group>
+        </b-form-group>
+      </b-col>
+
+      <b-col
+        md="6"
+        class="my-1">
+        <b-pagination
+          :total-rows="totalRows"
+          :per-page="perPage"
+          v-model="currentPage"
+          class="my-0" />
+      </b-col>
+
+      <b-col
+        md="6"
+        class="my-1">
+        <b-form-group
+          horizontal
+          label="Per page"
+          class="mb-0">
+          <b-form-select
+            :options="pageOptions"
+            v-model="perPage" />
+
+        </b-form-group>
+      </b-col>
+
+      <b-col>
+        <b-table
+          striped
+          hover
+          :items="lives"
+          :fields="fields"
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
+          :current-page="currentPage"
+          :per-page="perPage"
+          :filter="filter"
+          @filtered="onFiltered"
+        >
+          <template
+            slot="id"
+            slot-scope="data">
+            {{ data.value }}
+          </template>
+          <template
+            slot="subject"
+            slot-scope="data">
+            <a :href="`https://www.zhihu.com/lives/${data.item.id}`">
+              {{ data.value }}
+            </a>
+          </template>
+          <template
+            slot="speaker"
+            slot-scope="data">
+            <a :href="`https://www.zhihu.com/people/${data.item.speaker_url}`">
+              {{ data.value }}
+            </a>
+          </template>
         </b-table>
-    </div>
-  </section>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
 import axios from 'axios';
-import BootstrapVue from 'bootstrap-vue';
 import moment from 'moment';
 
-
 export default {
-    async asyncData({ error }) {
-        const url = 'https://raw.githubusercontent.com/calpa/zhihu-unlimited-live/master/db.json'
-        try {
-            const { data } = await axios.get(url);
-            const lives = Object.values(data.live);
-            const sortable = true;
-            const fields = [
-                { key:'id', sortable},
-                { key: 'subject'},
-                { key: 'starts_at', sortable, formatter: "dateFormatter" },
-                { key: 'fee', sortable, formatter: "feeFormatter" },
-                { key: 'participants', sortable},
-                { key: 'score', sortable }
-            ];
-            const sortBy = 'id';
-            const sortDesc = true;
+  data() {
+    const sortable = true;
+    return {
+      fields: [
+        { key: 'id', sortable },
+        { key: 'subject' },
+        { key: 'starts_at', sortable, formatter: 'dateFormatter' },
+        { key: 'fee', sortable, formatter: 'feeFormatter' },
+        { key: 'participants', sortable },
+        { key: 'score', sortable },
+        { key: 'speaker', sortable },
+      ],
+      sortBy: 'id',
+      sortDesc: true,
+      currentPage: 1,
+      perPage: 10,
+      pageOptions: [10, 20, 100],
+      filter: null,
+    };
+  },
+  async asyncData({ error }) {
+    const url = 'https://raw.githubusercontent.com/calpa/zhihu-unlimited-live/master/db.json';
+    try {
+      const { data } = await axios.get(url);
+      const lives = Object.values(data.live);
 
-            return { lives, fields, sortBy, sortDesc };
-        } catch (err) {
-            error({ statusCode: 404, mesesage: 'Items not found'});
-        }
-    },
-    methods: {
-        dateFormatter(value) {
-            return moment.unix(value).format('YYYY-MM-DD');
-        },
-        feeFormatter(value) {
-            return `${value/100}`;
-        }
+      return {
+        lives,
+        totalRows: lives.length,
+      };
+    } catch (err) {
+      error({ statusCode: 404, mesesage: 'Items not found' });
     }
-}
+  },
+  methods: {
+    dateFormatter(value) {
+      return moment.unix(value).format('YYYY-MM-DD');
+    },
+    feeFormatter(value) {
+      return `${value / 100}`;
+    },
+    onFiltered(items) {
+      this.totalRows = items.length;
+      this.currentPage = 1;
+    },
+  },
+};
 </script>
 
 <style>
 .container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+    padding-top: 20px;
 }
 </style>

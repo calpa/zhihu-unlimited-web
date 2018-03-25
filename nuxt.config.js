@@ -3,15 +3,15 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'zhihu-unlimited-web',
+    title: '知乎无限 live',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Zhihu Unlimited Project' }
+      { hid: 'description', name: 'description', content: 'Zhihu Unlimited Project' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+    ],
   },
   /*
   ** Customize the progress bar color
@@ -24,18 +24,19 @@ module.exports = {
     /*
     ** Run ESLint on save
     */
-    extend (config, { isDev, isClient }) {
+    extend(config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        })
+          exclude: /(node_modules)/,
+        });
       }
-    }
+    },
+    vendor: ['axios'],
   },
-    modules: [
-        'bootstrap-vue/nuxt',
-    ]
-}
+  modules: [
+    'bootstrap-vue/nuxt',
+  ],
+};
