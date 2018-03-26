@@ -126,6 +126,7 @@ export default {
     } catch (err) {
       error({ statusCode: 404, mesesage: 'Items not found' });
     }
+    return { };
   },
   methods: {
     dateFormatter(value) {
