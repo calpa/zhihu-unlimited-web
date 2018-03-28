@@ -38,5 +38,8 @@ module.exports = {
   },
   modules: [
     'bootstrap-vue/nuxt',
+    ['@nuxtjs/google-analytics', {
+      id: 'UA-84737574-4',
+    }],
   ],
 };
