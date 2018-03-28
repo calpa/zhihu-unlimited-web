@@ -1,22 +1,29 @@
-# zhihu-unlimited-web
+# 知乎无限 live 数据流网站
 
-> Zhihu Unlimited Project
+![Overview](https://i.imgur.com/TaTf7dq.jpg)
 
-## Build Setup
+心血来潮把所有知乎无限 live 的数据拿下来，然后做了一个数据流的网站。
 
-``` bash
-# install dependencies
-$ npm install # Or yarn install
+## 功能
+1. 展示所有 live 的日期，费用，参加人数，分数，以及讲者
+1. 提供过滤 live 名称功能
+1. 提供每页展示特定数量资料的选项 (10, 20, 100)
 
-# serve with hot reload at localhost:3000
-$ npm run dev
+## 如何运行
+### 开发环境配置
+1. nodejs
 
-# build for production and launch server
-$ npm run build
-$ npm start
+### 开发过程
+```
+# 开发
+npm run dev
 
-# generate static project
-$ npm run generate
+# 发布
+npm run generate
 ```
 
-For detailed explanation on how things work, checkout the [Nuxt.js docs](https://github.com/nuxt/nuxt.js).
+### 发布文件夹
+`/dist`
+
+## 数据
+数据位于 [zhihu-unlimited-live](https://github.com/calpa/zhihu-unlimited-live)，或者你可以访问知乎的 API。
