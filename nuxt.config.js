@@ -36,6 +36,9 @@ module.exports = {
     },
     vendor: ['axios'],
   },
+  plugins: [
+    '~/plugins/index',
+  ],
   modules: [
     'bootstrap-vue/nuxt',
     ['@nuxtjs/google-analytics', {

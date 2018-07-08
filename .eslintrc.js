@@ -16,5 +16,10 @@ module.exports = {
     'vue'
   ],
   // add your custom rules here
-  rules: {}
+    rules: {
+        "max-len": 1
+    },
+  settings: {
+    'import/core-modules': ['vue']
+  }
 }
